@@ -4,7 +4,7 @@
 
 Run as python 311_countsZip.py [complaintsfile] [zipboroughfile] [shapefile]
 
-Python script to read NYC 311 data, count number of complaints per zip code, and visualize as circles for each zip code. The size of each circle is proportional to the number of complaints in the zip code.
+Python script to read NYC 311 data, count number of complaints per zip code, and visualize as circles for each zip. The size of each circle is proportional to the number of complaints in the zip code.
 
 <h6> Dependencies: </h6>
 <ul> Python 2.7.8 </ul>
@@ -12,4 +12,5 @@ Python script to read NYC 311 data, count number of complaints per zip code, and
 <ul> Complaintsfile in CSV format: https://data.cityofnewyork.us/Social-Services/311_limitedcolumns2014/r96j-ebm2 </ul>
 <ul> Shapefile: https://www.census.gov/geo/maps-data/data/tiger-line.html </ul>
 <ul> Note: this script was built with the 2013 TIGER/Line Shapefiles </ul>
+
 
