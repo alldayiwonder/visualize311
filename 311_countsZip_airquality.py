@@ -3,6 +3,8 @@ import shapefile
 import sys
 from bokeh.plotting import *
 from bokeh.objects import HoverTool
+from bokeh.resources import CDN
+from bokeh.embed import components
 from collections import OrderedDict
 from collections import Counter
 
@@ -35,7 +37,8 @@ def getComplaints(complaints_file):
     complaints_dict=Counter()
     for row in reader:
       incident_zip = row[8]
-      if incident_zip in zipBorough:
+      complaint_type = row[5]
+      if incident_zip in zipBorough and complaint_type == 'Air Quality':
         complaints_dict[incident_zip] += 1
 
   return complaints_dict
@@ -71,7 +74,7 @@ def drawPlot(shapeFilename, zipBorough):
       # Get the center lat/long of the zip to plot the circles and set the size based on number of complaints
       center_lat.append(float(r[7]))
       center_lng.append(float(r[8]))
-      size = (complaints_dict[currentZip])*0.001
+      size = (complaints_dict[currentZip])*0.1
       circle_size.append(size)
 
       # Gets shape for this zip.
@@ -99,7 +102,7 @@ def drawPlot(shapeFilename, zipBorough):
   )
 
   # Creates the Plot
-  output_file("311_countsZip.html")
+  output_file("311_countsZip_airquality.html")
 
   # Creates the polygons
   patches(polygons['lng_list'],
@@ -110,16 +113,16 @@ def drawPlot(shapeFilename, zipBorough):
           tools="pan,wheel_zoom,box_zoom,reset,hover,previewsave",
           plot_width=1100,
           plot_height=700,
-          title="311 Complaints per Zip Code in 2014",
+          title="Number of Air Quality Complaints per Zip Code in 2014",
   )
 
   # Draws Points on top of map.
   hold()
 
-  scatter(center_lng,
+  airquality = scatter(center_lng,
           center_lat,
-          fill_color='red',
-          color='red',
+          fill_color='blue',
+          color='blue',
           line_alpha=0.1,
           size=circle_size)
 
@@ -129,7 +132,14 @@ def drawPlot(shapeFilename, zipBorough):
     ("Complaint Count", "@zip_count")
   ])
 
-  show()
+  show(airquality)
+
+  script, div = components(airquality, CDN)
+
+  embed_txt = open('airquality_embed.txt', 'w')
+  embed_txt.write(script+div)
+  embed_txt.close()
+
 
 
 if __name__ == "__main__":
